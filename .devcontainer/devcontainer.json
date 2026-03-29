@@ -1,0 +1,34 @@
+{
+    "name": "Laravel Sail",
+    "dockerComposeFile": [
+        "../compose.yaml"
+    ],
+    "service": "laravel.test",
+    "workspaceFolder": "/var/www/html",
+    "runServices": [
+        "laravel.test",
+        "mysql"
+    ],
+    "forwardPorts": [
+        8000,
+        5173,
+        3306
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "esbenp.prettier-vscode",
+                "mikestead.dotenv",
+                "onecentlin.laravel-blade",
+                "xdebug.php-debug"
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "remoteUser": "sail",
+    "postCreateCommand": "composer install && npm install"
+}

@@ -1,0 +1,398 @@
+PANDUAN INTERNAL MENJALANKAN PROJECT DENTALCARE LITE
+
+Dokumen ini ditujukan untuk tim internal development.
+Isi dokumen:
+- cara menjalankan dengan Docker Engine
+- cara menjalankan dengan Docker Desktop
+- cara menjalankan tanpa Docker
+- cara menghentikan project
+- quick start versi singkat
+- catatan hasil testing yang sudah dilakukan
+
+Lokasi project saat dokumen ini dibuat:
+/media/arismaulana/Linux/Project/Project/Putri Alisha/DentalCare
+
+==================================================
+1. RINGKASAN CEPAT
+==================================================
+
+Quick start dengan Docker:
+1. Masuk ke folder project
+2. Siapkan file .env
+3. Jalankan Docker Compose
+4. Install dependency dan siapkan Laravel
+5. Buka aplikasi di browser
+
+Perintah cepat:
+cd /media/arismaulana/Linux/Project/Project/Putri Alisha/DentalCare
+cp .env.example .env
+docker compose up -d --build
+docker compose exec app sh -lc 'composer install && npm install && php artisan key:generate && php artisan migrate --seed'
+
+Akses aplikasi:
+http://localhost:8080
+
+Menghentikan project Docker:
+docker compose down
+
+Quick start tanpa Docker:
+1. Install dependency
+2. Siapkan .env
+3. Generate key
+4. Atur database
+5. Jalankan migrasi dan build
+6. Start Laravel
+
+Perintah cepat:
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm run build
+php artisan serve
+
+Akses aplikasi tanpa Docker:
+http://127.0.0.1:8000
+
+Menghentikan project tanpa Docker:
+- tekan Ctrl+C pada terminal yang menjalankan php artisan serve
+- jika npm run dev sedang aktif, tekan Ctrl+C juga pada terminal Vite
+
+==================================================
+2. INFORMASI PORT DAN SERVICE
+==================================================
+
+Saat berjalan dengan Docker, service utamanya:
+- app: PHP-FPM dan Node.js
+- nginx: web server
+- mysql: database
+
+Port default:
+- aplikasi web: 8080
+- mysql host: 3307
+- vite dev server: 5173
+
+Mapping dari docker-compose.yml:
+- host 8080 -> nginx 80
+- host 3307 -> mysql 3306
+- host 5173 -> vite 5173
+
+==================================================
+3. MENJALANKAN DENGAN DOCKER ENGINE
+==================================================
+
+Metode ini cocok untuk Linux atau environment yang memakai Docker Engine dan Docker Compose Plugin.
+
+Prasyarat:
+- Docker Engine terpasang
+- Docker Compose Plugin tersedia
+- Port 8080, 3307, dan 5173 tidak dipakai aplikasi lain
+
+Langkah:
+1. Masuk ke folder project:
+   cd /media/arismaulana/Linux/Project/Project/Putri Alisha/DentalCare
+
+2. Siapkan environment:
+   cp .env.example .env
+
+3. Build image dan nyalakan container:
+   docker compose up -d --build
+
+4. Install dependency dan siapkan Laravel di dalam container:
+   docker compose exec app sh -lc 'composer install && npm install && php artisan key:generate && php artisan migrate --seed'
+
+5. Verifikasi container:
+   docker compose ps
+
+6. Buka aplikasi:
+   http://localhost:8080
+
+Perintah penting:
+- status container:
+  docker compose ps
+
+- lihat log semua service:
+  docker compose logs -f
+
+- lihat log service tertentu:
+  docker compose logs -f nginx
+  docker compose logs -f app
+  docker compose logs -f mysql
+
+- masuk ke shell app:
+  docker compose exec app sh
+
+- artisan command:
+  docker compose exec app php artisan migrate
+  docker compose exec app php artisan test
+
+- build asset production jika diperlukan:
+  docker compose exec app npm run build
+
+- jalankan Vite dev server bila ingin hot reload:
+  docker compose exec app npm run dev -- --host 0.0.0.0
+
+Catatan mode development frontend dengan Docker:
+- Laravel tetap diakses lewat http://localhost:8080
+- Vite dev server tersedia di port 5173
+- Jalankan npm run dev pada terminal terpisah jika Anda ingin hot reload
+- Jika hanya ingin menjalankan aplikasi biasa, npm run dev tidak wajib
+
+Cara menghentikan project dengan Docker Engine:
+1. Hentikan Vite jika sedang berjalan:
+   tekan Ctrl+C pada terminal yang menjalankan npm run dev
+
+2. Turunkan stack:
+   docker compose down
+
+Jika ingin menghentikan tanpa menghapus network:
+- docker compose stop
+
+Jika ingin menghapus volume database juga, gunakan dengan hati-hati:
+- docker compose down -v
+
+Catatan penting:
+- docker compose down -v akan menghapus volume database container
+- gunakan down -v hanya jika memang ingin reset data container
+
+==================================================
+4. MENJALANKAN DENGAN DOCKER DESKTOP
+==================================================
+
+Metode ini cocok untuk Windows, macOS, atau Linux yang memakai Docker Desktop.
+Secara teknis perintah Compose-nya sama, hanya pengelola Docker-nya menggunakan Docker Desktop.
+
+Prasyarat:
+- Docker Desktop sudah terpasang
+- Status Docker Desktop sudah Running
+- Docker Compose aktif
+- Folder project dapat diakses oleh Docker Desktop
+
+Langkah:
+1. Buka Docker Desktop dan pastikan engine aktif
+
+2. Buka terminal:
+   - Windows: PowerShell, Command Prompt, atau WSL
+   - macOS/Linux: Terminal biasa
+
+3. Masuk ke folder project
+
+4. Siapkan .env:
+   cp .env.example .env
+
+5. Jalankan container:
+   docker compose up -d --build
+
+6. Setup Laravel:
+   docker compose exec app sh -lc 'composer install && npm install && php artisan key:generate && php artisan migrate --seed'
+
+7. Buka aplikasi:
+   http://localhost:8080
+
+Cara memonitor dari Docker Desktop:
+- buka tab Containers
+- cari container:
+  dentalcare-app
+  dentalcare-nginx
+  dentalcare-mysql
+- lihat status, logs, exec shell, dan port mapping dari UI
+
+Catatan khusus Windows:
+- Anda boleh memakai PowerShell, CMD, atau WSL
+- Jika command cp tidak nyaman dipakai, di PowerShell Anda bisa memakai:
+  Copy-Item .env.example .env
+- Pastikan folder project tidak diblok oleh kebijakan file sharing Docker Desktop
+
+Mode development frontend dengan Docker Desktop:
+- jalankan:
+  docker compose exec app npm run dev -- --host 0.0.0.0
+- buka aplikasi utama di:
+  http://localhost:8080
+- port vite dev server berada di:
+  http://localhost:5173
+
+Cara menghentikan project dengan Docker Desktop:
+Pilihan terminal:
+- hentikan vite jika sedang aktif dengan Ctrl+C
+- jalankan:
+  docker compose down
+
+Pilihan UI Docker Desktop:
+- buka tab Containers
+- pilih stack atau container project
+- tekan Stop untuk menghentikan
+- jika ingin membersihkan stack sepenuhnya, gunakan Delete atau gunakan docker compose down dari terminal
+
+==================================================
+5. MENJALANKAN TANPA DOCKER
+==================================================
+
+Metode ini cocok jika Anda ingin menjalankan Laravel langsung di mesin lokal.
+
+Prasyarat minimum:
+- PHP 8.2 atau lebih baru
+- Composer
+- Node.js dan npm
+- MySQL 8 atau kompatibel
+
+Ekstensi PHP penting:
+- bcmath
+- exif
+- gd
+- intl
+- pdo_mysql
+- xml
+- zip
+
+Ekstensi yang biasanya dibutuhkan untuk PHPUnit:
+- dom
+- xml
+- xmlwriter
+
+Langkah:
+1. Masuk ke folder project:
+   cd /media/arismaulana/Linux/Project/Project/Putri Alisha/DentalCare
+
+2. Install dependency:
+   composer install
+   npm install
+
+3. Siapkan .env:
+   cp .env.example .env
+
+4. Generate application key:
+   php artisan key:generate
+
+5. Buat database MySQL lokal, lalu sesuaikan .env:
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=dentalcare
+   DB_USERNAME=nama_user_mysql
+   DB_PASSWORD=password_mysql
+
+6. Jalankan migrasi dan seeder:
+   php artisan migrate --seed
+
+7. Build asset production:
+   npm run build
+
+8. Jalankan aplikasi:
+   php artisan serve
+
+9. Buka aplikasi:
+   http://127.0.0.1:8000
+
+Mode development frontend tanpa Docker:
+1. Jalankan Vite dev server pada terminal pertama:
+   npm run dev
+
+2. Jalankan Laravel pada terminal kedua:
+   php artisan serve
+
+3. Buka aplikasi:
+   http://127.0.0.1:8000
+
+Catatan mode dev tanpa Docker:
+- npm run dev digunakan untuk hot reload asset frontend
+- php artisan serve tetap diperlukan untuk backend Laravel
+- dua terminal dibutuhkan jika frontend dijalankan dalam mode dev
+
+Cara menghentikan project tanpa Docker:
+- jika php artisan serve aktif, tekan Ctrl+C pada terminal tersebut
+- jika npm run dev aktif, tekan Ctrl+C pada terminal Vite
+- jika Anda menyalakan MySQL lokal secara manual, hentikan MySQL sesuai cara instalasi di OS Anda
+
+==================================================
+6. AKUN DEMO HASIL SEEDER
+==================================================
+
+Akun yang dapat dipakai:
+- Admin: admin@dentalcare.test / password
+- Pasien: patient@dentalcare.test / password
+- Dokter 1: dr.aji@dentalcare.test / password
+- Dokter 2: dr.salsa@dentalcare.test / password
+- Dokter 3: dr.rizky@dentalcare.test / password
+
+==================================================
+7. ENVIRONMENT PENTING
+==================================================
+
+Variable penting:
+- MIDTRANS_SERVER_KEY
+- MIDTRANS_CLIENT_KEY
+- MIDTRANS_IS_PRODUCTION
+- MIDTRANS_CALLBACK_URL
+- GOOGLE_CLIENT_ID
+- GOOGLE_CLIENT_SECRET
+- GOOGLE_REDIRECT_URI
+- MAIL_MAILER
+- MAIL_HOST
+- MAIL_PORT
+- MAIL_USERNAME
+- MAIL_PASSWORD
+- APPOINTMENT_SLOT_MINUTES
+
+Catatan:
+- jika key Midtrans belum diisi, alur booking demo tetap bisa dipakai, tetapi pembayaran eksternal tidak berjalan penuh
+- jika Google login ingin diaktifkan, isi credential OAuth dan arahkan callback ke URL aplikasi yang benar
+
+==================================================
+8. TESTING YANG SUDAH DILAKUKAN
+==================================================
+
+Testing dilakukan pada 2026-04-10 dari folder project ini.
+
+Langkah testing Docker yang dijalankan:
+1. docker compose up -d --build
+2. docker compose exec app sh -lc 'composer install && npm install && php artisan key:generate && php artisan migrate --seed'
+3. curl -I http://localhost:8080
+4. docker compose exec app sh -lc 'curl -I http://nginx'
+5. docker compose exec app php artisan test
+6. docker compose down
+
+Hasil testing:
+- aplikasi merespons HTTP 200 pada http://localhost:8080
+- nginx di jaringan Docker juga merespons HTTP 200
+- test suite Laravel lulus
+- hasil akhir test:
+  42 passed, 131 assertions
+
+Catatan:
+- saat composer install muncul warning Git "dubious ownership" di /var/www/html
+- warning tersebut tidak menghentikan setup dan test tetap berhasil
+- npm install melaporkan 2 vulnerability dependency, tetapi proses setup tetap berjalan
+
+==================================================
+9. TROUBLESHOOTING SINGKAT
+==================================================
+
+1. Port 8080 sudah dipakai
+- ganti port mapping di docker-compose.yml
+- atau hentikan aplikasi lain yang memakai port 8080
+
+2. Port 3307 sudah dipakai
+- ganti port MySQL host di docker-compose.yml
+
+3. Project Docker sudah jalan tapi halaman belum tampil
+- cek:
+  docker compose ps
+- cek log:
+  docker compose logs -f
+- pastikan setup Laravel sudah dijalankan
+
+4. Tanpa Docker tidak bisa konek database
+- cek konfigurasi DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+- pastikan MySQL lokal aktif
+
+5. Asset frontend tidak tampil
+- jalankan:
+  npm install
+  npm run build
+
+6. Hot reload tidak jalan
+- pastikan npm run dev aktif
+- jika pakai Docker, gunakan:
+  docker compose exec app npm run dev -- --host 0.0.0.0
+

@@ -1,0 +1,798 @@
+MATERI DAN NASKAH PRESENTASI LENGKAP
+PROYEK: DENTALCARE LITE
+
+Format dokumen:
+- Bisa dipakai sebagai materi presentasi
+- Bisa dibaca langsung sebagai naskah saat maju
+- Bisa dijadikan dasar membuat slide PPT
+
+Target audiens:
+- Dosen
+- Teman kelas
+
+Gaya penyampaian:
+- Formal
+- Tetap santai
+- Mudah dipahami
+
+Estimasi durasi:
+- Fleksibel
+- Jika dibawakan penuh dengan demo: sekitar 10 sampai 15 menit
+- Jika ingin dipersingkat: bisa dipadatkan menjadi 7 sampai 10 menit
+
+==================================================================
+DAFTAR ISI
+==================================================================
+
+1. Gambaran umum presentasi
+2. Susunan slide yang disarankan
+3. Naskah presentasi lengkap per slide
+4. Alur demo aplikasi
+5. Kelebihan sistem
+6. Keterbatasan sistem
+7. Pengembangan lanjutan
+8. Prediksi tanya jawab dosen
+9. Penutup singkat siap pakai
+
+==================================================================
+1. GAMBARAN UMUM PRESENTASI
+==================================================================
+
+DentalCare Lite adalah aplikasi reservasi klinik gigi berbasis web yang dibangun dengan Laravel 11.
+Aplikasi ini dirancang untuk membantu proses pelayanan klinik dari awal sampai akhir, mulai dari pasien melihat layanan, melakukan booking, membayar, menjalani pemeriksaan, hingga memperoleh invoice dan resume medis.
+
+Sistem ini dibagi ke dalam beberapa area pengguna, yaitu:
+- area publik
+- area pasien
+- area dokter
+- area admin
+
+Fitur utama yang benar-benar tersedia di proyek ini meliputi:
+- katalog layanan dan dokter
+- booking online berdasarkan dokter, layanan, tanggal, dan jam
+- validasi slot agar tidak terjadi bentrok jadwal
+- nomor antrean otomatis
+- pembayaran digital melalui Midtrans
+- webhook callback untuk update status pembayaran otomatis
+- dashboard dokter dan pengisian resume medis
+- invoice PDF dan medical record PDF
+- dashboard laporan admin
+- autentikasi pasien dengan email maupun Google login
+- notifikasi sistem
+- audit field standar pada tabel utama database
+
+==================================================================
+2. SUSUNAN SLIDE YANG DISARANKAN
+==================================================================
+
+Susunan slide yang aman dan enak dibawakan:
+
+Slide 1. Judul proyek
+Slide 2. Latar belakang masalah
+Slide 3. Rumusan masalah dan tujuan
+Slide 4. Gambaran umum sistem
+Slide 5. Pengguna sistem dan hak akses
+Slide 6. Teknologi yang digunakan
+Slide 7. Arsitektur sederhana aplikasi
+Slide 8. Struktur data dan audit field
+Slide 9. Alur booking pasien
+Slide 10. Validasi slot dan nomor antrean
+Slide 11. Pembayaran Midtrans dan webhook
+Slide 12. Fitur dokter dan resume medis
+Slide 13. Fitur admin dan laporan
+Slide 14. Pengujian dan kualitas sistem
+Slide 15. Kelebihan, kekurangan, dan pengembangan lanjutan
+Slide 16. Demo singkat
+Slide 17. Kesimpulan
+Slide 18. Tanya jawab
+
+Jika dosen meminta singkat, slide 14 sampai 16 bisa dipadatkan.
+
+==================================================================
+3. NASKAH PRESENTASI LENGKAP PER SLIDE
+==================================================================
+
+------------------------------------------------------------------
+SLIDE 1 - JUDUL
+------------------------------------------------------------------
+
+Judul slide:
+DentalCare Lite
+Sistem Reservasi Klinik Gigi Berbasis Web
+
+Naskah:
+
+Assalamu'alaikum warahmatullahi wabarakatuh.
+Selamat pagi atau selamat siang Bapak/Ibu dosen dan teman-teman sekalian.
+
+Pada kesempatan ini saya akan mempresentasikan proyek yang berjudul DentalCare Lite, yaitu aplikasi reservasi klinik gigi berbasis web.
+Sistem ini dikembangkan untuk membantu proses pelayanan klinik agar lebih terstruktur, lebih cepat, dan lebih terdokumentasi secara digital.
+
+Melalui aplikasi ini, proses yang sebelumnya terpisah seperti booking pasien, pembayaran, pencatatan medis, dan pelaporan admin dapat diintegrasikan ke dalam satu sistem.
+
+------------------------------------------------------------------
+SLIDE 2 - LATAR BELAKANG MASALAH
+------------------------------------------------------------------
+
+Judul slide:
+Latar Belakang
+
+Naskah:
+
+Latar belakang dari pengembangan sistem ini adalah karena layanan klinik, jika masih dijalankan secara manual, sering menimbulkan beberapa masalah.
+
+Masalah pertama adalah proses reservasi yang kurang efisien.
+Pasien biasanya harus datang langsung, menghubungi admin, atau menunggu konfirmasi manual hanya untuk mengetahui jadwal dokter dan slot yang tersedia.
+
+Masalah kedua adalah potensi bentrok jadwal.
+Jika pencatatan booking masih dilakukan secara manual, maka risiko double booking cukup besar, apalagi ketika ada beberapa pasien yang mendaftar pada hari yang sama.
+
+Masalah ketiga adalah data layanan yang tidak terintegrasi.
+Sering kali data pasien, pembayaran, dan catatan medis disimpan terpisah sehingga memperlambat pelayanan dan menyulitkan pencarian riwayat.
+
+Masalah keempat adalah pelaporan yang kurang praktis.
+Admin harus merekap pendapatan, jumlah kunjungan, dan data layanan secara manual, sehingga rawan kesalahan dan memakan waktu.
+
+Dari masalah tersebut, muncullah kebutuhan akan sistem yang mampu mengelola proses klinik secara terintegrasi dari awal sampai akhir.
+
+------------------------------------------------------------------
+SLIDE 3 - RUMUSAN MASALAH DAN TUJUAN
+------------------------------------------------------------------
+
+Judul slide:
+Rumusan Masalah dan Tujuan
+
+Naskah:
+
+Berdasarkan latar belakang tadi, rumusan masalah pada proyek ini adalah bagaimana membangun aplikasi klinik gigi yang dapat:
+- mempermudah proses booking pasien
+- mengurangi bentrok jadwal dokter
+- mendukung pembayaran digital
+- membantu pencatatan resume medis
+- dan menyediakan laporan admin secara lebih cepat
+
+Adapun tujuan dari DentalCare Lite adalah:
+- menyediakan sistem reservasi online yang mudah digunakan
+- membantu pengelolaan jadwal dokter dan slot kunjungan
+- mengotomatisasi proses pembayaran dengan Midtrans
+- mendukung dokter dalam membuat resume medis digital
+- membantu admin memantau operasional klinik
+- dan menjaga akuntabilitas data melalui struktur database yang lebih rapi
+
+------------------------------------------------------------------
+SLIDE 4 - GAMBARAN UMUM SISTEM
+------------------------------------------------------------------
+
+Judul slide:
+Gambaran Umum Sistem
+
+Naskah:
+
+Secara umum, DentalCare Lite adalah aplikasi web berbasis Laravel 11 dengan pendekatan monolitik.
+Artinya, seluruh modul utama seperti autentikasi, booking, pembayaran, resume medis, dan laporan admin berada dalam satu aplikasi yang saling terhubung.
+
+Sistem ini dimulai dari area publik, di mana pengguna dapat melihat informasi layanan dan dokter.
+Setelah itu, pasien dapat login, membuat booking, dan melanjutkan pembayaran.
+Setelah pembayaran berhasil, dokter dapat melayani pasien dan mengisi resume medis.
+Di sisi lain, admin dapat memantau pembayaran, layanan, jadwal, dokter, dan laporan pendapatan.
+
+Jadi, alurnya benar-benar menggambarkan proses klinik dari awal sampai akhir.
+
+------------------------------------------------------------------
+SLIDE 5 - PENGGUNA SISTEM DAN HAK AKSES
+------------------------------------------------------------------
+
+Judul slide:
+Pengguna Sistem
+
+Naskah:
+
+Di dalam aplikasi ini terdapat tiga peran utama dan satu area publik.
+
+Pertama adalah area publik.
+Pada area ini pengguna dapat melihat halaman beranda, daftar layanan, dan daftar dokter tanpa harus login terlebih dahulu.
+
+Kedua adalah pasien.
+Pasien dapat membuat booking, melihat riwayat kunjungan, melakukan pembayaran, mengunduh invoice, dan mengunduh resume medis jika sudah dibuat oleh dokter.
+
+Ketiga adalah dokter.
+Dokter memiliki dashboard sendiri dan dapat melihat booking pasien yang menjadi tanggung jawabnya, lalu mengisi resume medis setelah pemeriksaan dilakukan.
+
+Keempat adalah admin.
+Admin memiliki akses untuk mengelola data dokter, layanan, jadwal praktik, memantau pembayaran, dan melihat laporan klinik.
+
+Pembagian peran ini penting karena setiap pengguna hanya boleh mengakses fitur yang sesuai dengan kebutuhannya.
+
+------------------------------------------------------------------
+SLIDE 6 - TEKNOLOGI YANG DIGUNAKAN
+------------------------------------------------------------------
+
+Judul slide:
+Teknologi yang Digunakan
+
+Naskah:
+
+Untuk pengembangan sistem, proyek ini menggunakan beberapa teknologi utama.
+
+Untuk backend, aplikasi menggunakan PHP 8.2 dan Laravel 11.
+Laravel dipilih karena memiliki struktur yang jelas, mendukung routing, ORM Eloquent, validasi, middleware, notifikasi, dan pengelolaan view dengan baik.
+
+Untuk frontend, aplikasi menggunakan Blade Template, Bootstrap 5, dan Vite.
+Blade digunakan untuk menyusun tampilan berbasis server-side rendering.
+Bootstrap membantu membuat antarmuka yang responsif.
+Vite digunakan untuk pengelolaan aset frontend.
+
+Untuk database, digunakan MySQL.
+
+Untuk pembayaran digital, aplikasi terintegrasi dengan Midtrans Snap.
+
+Untuk pembuatan dokumen, aplikasi memanfaatkan DomPDF sehingga invoice dan resume medis dapat diunduh dalam bentuk PDF.
+
+Selain itu, proyek juga mendukung Docker Compose untuk mempermudah menjalankan aplikasi di lingkungan lokal.
+
+------------------------------------------------------------------
+SLIDE 7 - ARSITEKTUR SEDERHANA APLIKASI
+------------------------------------------------------------------
+
+Judul slide:
+Arsitektur Sistem
+
+Naskah:
+
+Jika dilihat dari sisi arsitektur, alurnya cukup sederhana.
+
+Pengguna mengakses aplikasi melalui browser.
+Request dari browser diteruskan ke Nginx.
+Setelah itu Nginx meneruskan proses ke aplikasi Laravel yang berjalan di PHP-FPM.
+Kemudian Laravel berkomunikasi dengan database MySQL untuk membaca dan menyimpan data.
+
+Untuk pembayaran, aplikasi juga terhubung ke layanan Midtrans.
+Saat booking dibuat, sistem membuat data pembayaran dan menyiapkan transaksi Midtrans.
+Ketika pembayaran selesai, Midtrans mengirim callback ke aplikasi melalui endpoint webhook.
+Dari sini status pembayaran dan status booking diperbarui secara otomatis.
+
+Keuntungan arsitektur seperti ini adalah sistem lebih mudah dikelola, mudah dijalankan untuk pengembangan, dan alur datanya cukup jelas.
+
+------------------------------------------------------------------
+SLIDE 8 - STRUKTUR DATA DAN AUDIT FIELD
+------------------------------------------------------------------
+
+Judul slide:
+Database dan Audit Field
+
+Naskah:
+
+Salah satu hal penting dalam proyek ini adalah struktur database yang tidak hanya fokus pada fitur, tetapi juga pada akuntabilitas data.
+
+Tabel-tabel utama dalam sistem meliputi:
+- users
+- doctor_profiles
+- doctor_schedules
+- services
+- bookings
+- payments
+- medical_notes
+- notifications
+
+Selain itu, tabel utama menerapkan audit field standar, yaitu:
+- CompanyCode
+- Status
+- IsDeleted
+- CreatedBy
+- CreatedDate
+- LastUpdatedBy
+- LastUpdatedDate
+
+Penerapan audit field ini penting karena membantu pelacakan data, memudahkan pengawasan perubahan, dan mendukung standar pencatatan yang lebih rapi.
+
+Jadi, sistem ini bukan hanya berfungsi secara operasional, tetapi juga memperhatikan integritas data.
+
+------------------------------------------------------------------
+SLIDE 9 - ALUR BOOKING PASIEN
+------------------------------------------------------------------
+
+Judul slide:
+Alur Booking Pasien
+
+Naskah:
+
+Sekarang saya jelaskan alur utama dari sisi pasien.
+
+Pertama, pasien membuka halaman booking dan memilih dokter, layanan, tanggal kunjungan, serta jam yang tersedia.
+
+Kedua, sistem melakukan validasi.
+Jika data valid dan slot masih tersedia, maka sistem membuat data booking.
+
+Pada saat itu, sistem menyimpan beberapa informasi penting seperti:
+- kode booking
+- pasien
+- dokter
+- layanan
+- tanggal dan jam booking
+- nomor antrean
+- harga layanan
+- catatan tambahan jika ada
+
+Setelah booking berhasil dibuat, sistem otomatis membuat data pembayaran dengan status awal pending.
+Jadi, booking dan pembayaran langsung saling terhubung.
+
+------------------------------------------------------------------
+SLIDE 10 - VALIDASI SLOT DAN NOMOR ANTREAN
+------------------------------------------------------------------
+
+Judul slide:
+Validasi Slot Booking
+
+Naskah:
+
+Bagian ini adalah salah satu inti logika aplikasi.
+
+Dalam proyek ini, booking tidak cukup hanya menyimpan tanggal dan jam, tetapi juga harus memeriksa apakah slot yang dipilih memang valid.
+
+Sistem melakukan beberapa langkah:
+
+Langkah pertama, mengambil jadwal dokter berdasarkan hari yang dipilih.
+
+Langkah kedua, mengambil booking aktif pada tanggal tersebut.
+Booking aktif yang dihitung adalah status pending payment, confirmed, atau completed.
+
+Langkah ketiga, sistem membangun daftar slot yang tersedia dengan mempertimbangkan:
+- jam praktik dokter
+- slot minutes
+- durasi layanan
+- dan booking yang sudah ada
+
+Langkah keempat, sistem memeriksa apakah ada benturan waktu.
+Jika ada layanan berdurasi panjang, maka slot berikutnya yang tumpang tindih tidak boleh diambil pasien lain.
+
+Dengan mekanisme ini, sistem dapat menekan risiko double booking.
+Selain itu, nomor antrean juga dihasilkan otomatis berdasarkan urutan booking aktif pada hari tersebut.
+
+------------------------------------------------------------------
+SLIDE 11 - PEMBAYARAN MIDTRANS DAN WEBHOOK
+------------------------------------------------------------------
+
+Judul slide:
+Pembayaran Digital
+
+Naskah:
+
+Setelah booking dibuat, sistem melanjutkan ke proses pembayaran digital menggunakan Midtrans.
+
+Sistem membuat transaksi pembayaran, lalu menghasilkan Snap Token.
+Token ini dipakai untuk membuka proses pembayaran dengan berbagai metode seperti transfer bank, e-wallet, atau metode lain yang didukung Midtrans.
+
+Bagian penting berikutnya adalah webhook callback.
+Ketika pembayaran berhasil atau statusnya berubah, Midtrans mengirim data ke endpoint aplikasi.
+Lalu aplikasi memverifikasi signature, mengambil status transaksi, dan memperbarui data pembayaran.
+
+Jika status pembayaran menjadi paid, maka booking otomatis berubah menjadi confirmed.
+Jika status pembayaran gagal atau kedaluwarsa, maka booking bisa berubah menjadi cancelled.
+
+Proses ini sangat membantu karena admin tidak perlu memverifikasi pembayaran satu per satu secara manual.
+
+------------------------------------------------------------------
+SLIDE 12 - FITUR DOKTER DAN RESUME MEDIS
+------------------------------------------------------------------
+
+Judul slide:
+Fitur Dokter
+
+Naskah:
+
+Setelah pembayaran selesai dan pasien datang untuk pemeriksaan, peran berikutnya berada pada dokter.
+
+Dokter dapat melihat daftar booking yang sudah confirmed atau completed.
+Kemudian dokter dapat membuka form resume medis untuk pasien tersebut.
+
+Data yang dapat diisi dokter antara lain:
+- diagnosis
+- treatment atau tindakan
+- prescription atau resep
+- catatan tambahan
+
+Setelah resume medis disimpan, status booking diperbarui menjadi completed.
+Pasien kemudian dapat mengunduh resume medis dalam format PDF.
+
+Fitur ini penting karena membuat proses dokumentasi medis menjadi lebih rapi, lebih mudah diakses, dan tidak bergantung pada catatan manual semata.
+
+------------------------------------------------------------------
+SLIDE 13 - FITUR ADMIN DAN LAPORAN
+------------------------------------------------------------------
+
+Judul slide:
+Fitur Admin
+
+Naskah:
+
+Admin memiliki peran penting sebagai pengelola operasional.
+
+Di dalam sistem ini, admin dapat:
+- mengelola data layanan
+- mengelola data dokter
+- mengelola jadwal praktik
+- memantau pembayaran
+- melihat laporan klinik
+
+Pada halaman laporan, admin dapat melihat statistik seperti:
+- total revenue
+- jumlah kunjungan
+- jumlah transaksi lunas
+- jumlah kunjungan yang sudah completed
+
+Selain itu tersedia juga data breakdown layanan dan grafik pendapatan bulanan.
+Dengan adanya laporan ini, admin tidak perlu merekap semuanya secara manual.
+
+------------------------------------------------------------------
+SLIDE 14 - INVOICE, PDF, DAN NOTIFIKASI
+------------------------------------------------------------------
+
+Judul slide:
+Dokumen dan Notifikasi
+
+Naskah:
+
+Aplikasi ini juga menyediakan output dokumen yang langsung berguna bagi pasien dan klinik.
+
+Pertama adalah invoice PDF.
+Invoice hanya dapat diunduh ketika pembayaran sudah berstatus paid.
+Ini penting untuk memastikan dokumen pembayaran hanya tersedia untuk transaksi yang benar-benar lunas.
+
+Kedua adalah medical record PDF atau resume medis PDF.
+Dokumen ini bisa diunduh setelah dokter mengisi catatan medis pasien.
+
+Selain itu, sistem juga mendukung notifikasi untuk beberapa kejadian penting, seperti:
+- booking berhasil dibuat
+- pembayaran berhasil
+- resume medis sudah tersedia
+
+Dengan begitu, pengalaman pengguna menjadi lebih informatif dan lebih profesional.
+
+------------------------------------------------------------------
+SLIDE 15 - PENGUJIAN DAN KUALITAS SISTEM
+------------------------------------------------------------------
+
+Judul slide:
+Pengujian Sistem
+
+Naskah:
+
+Untuk menjaga kualitas aplikasi, proyek ini juga dilengkapi dengan beberapa pengujian fitur.
+
+Contoh pengujian yang tersedia antara lain:
+- pengujian alur booking pasien
+- pengujian penolakan booking jika kuota penuh
+- pengujian penolakan booking jika terjadi benturan durasi layanan
+- pengujian webhook Midtrans untuk memastikan pembayaran mengubah status booking dengan benar
+- pengujian dashboard laporan admin
+
+Artinya, sistem ini tidak hanya dibuat agar berjalan, tetapi juga diuji pada alur-alur penting yang paling berisiko menimbulkan kesalahan.
+
+Ini menjadi nilai tambah karena menunjukkan bahwa aplikasi dibangun dengan memperhatikan reliabilitas.
+
+------------------------------------------------------------------
+SLIDE 16 - KELEBIHAN SISTEM
+------------------------------------------------------------------
+
+Judul slide:
+Kelebihan DentalCare Lite
+
+Naskah:
+
+Menurut saya, ada beberapa kelebihan utama dari DentalCare Lite.
+
+Pertama, sistem ini mengintegrasikan banyak proses klinik ke dalam satu aplikasi.
+
+Kedua, booking tidak hanya sekadar mencatat data, tetapi benar-benar memvalidasi slot agar tidak bentrok.
+
+Ketiga, pembayaran sudah terhubung dengan Midtrans sehingga status transaksi dapat diperbarui otomatis.
+
+Keempat, sistem mendukung output dokumen seperti invoice dan resume medis PDF.
+
+Kelima, tersedia pembagian role yang jelas antara pasien, dokter, dan admin.
+
+Keenam, penerapan audit field membuat data lebih tertata dan lebih mudah diawasi.
+
+Jadi, proyek ini tidak hanya fokus pada tampilan, tetapi juga logika bisnis dan struktur data.
+
+------------------------------------------------------------------
+SLIDE 17 - KETERBATASAN SISTEM
+------------------------------------------------------------------
+
+Judul slide:
+Keterbatasan Sistem
+
+Naskah:
+
+Walaupun sistem ini sudah berjalan, tentu masih ada beberapa keterbatasan.
+
+Pertama, sistem ini masih berfokus pada kebutuhan dasar klinik dan belum mencakup fitur yang lebih kompleks seperti stok obat, multi-cabang, atau integrasi dengan BPJS.
+
+Kedua, aplikasi ini berbasis web dan belum dibuatkan versi mobile native.
+
+Ketiga, alur pembayaran sudah mendukung Midtrans, tetapi implementasi di dunia nyata tetap memerlukan konfigurasi environment dan domain yang benar.
+
+Keempat, dashboard analitik masih pada level laporan operasional dasar dan belum sampai ke analisis yang lebih mendalam.
+
+Menyampaikan keterbatasan seperti ini penting agar presentasi kita terlihat jujur, realistis, dan akademis.
+
+------------------------------------------------------------------
+SLIDE 18 - PENGEMBANGAN LANJUTAN
+------------------------------------------------------------------
+
+Judul slide:
+Pengembangan Selanjutnya
+
+Naskah:
+
+Jika proyek ini dikembangkan lebih lanjut, ada beberapa fitur yang sangat potensial untuk ditambahkan.
+
+Misalnya:
+- sistem stok obat dan alat medis
+- reminder jadwal pasien melalui WhatsApp atau email
+- reschedule dan pembatalan booking yang lebih fleksibel
+- dashboard analitik yang lebih kaya
+- integrasi multi-cabang klinik
+- aplikasi mobile
+- ekspor laporan yang lebih lengkap
+- integrasi antrean real time
+
+Dengan pengembangan tersebut, DentalCare Lite bisa ditingkatkan dari proyek akademik menjadi sistem yang lebih siap dipakai secara nyata.
+
+------------------------------------------------------------------
+SLIDE 19 - DEMO SINGKAT
+------------------------------------------------------------------
+
+Judul slide:
+Demo Sistem
+
+Naskah:
+
+Pada bagian demo, saya akan memperlihatkan alur utama aplikasi secara singkat.
+
+Pertama, saya akan menunjukkan halaman publik untuk melihat layanan dan dokter.
+
+Kedua, saya akan masuk sebagai pasien dan menunjukkan proses booking.
+
+Ketiga, saya akan menjelaskan bahwa setelah booking dibuat, sistem menyiapkan pembayaran Midtrans.
+
+Keempat, saya akan menunjukkan riwayat booking pasien, termasuk invoice atau resume medis jika sudah tersedia.
+
+Kelima, saya akan masuk ke area dokter untuk memperlihatkan form resume medis.
+
+Keenam, saya akan membuka area admin untuk menunjukkan pengelolaan data dan dashboard laporan.
+
+Jika waktu presentasi terbatas, demo bisa difokuskan hanya pada alur pasien ke admin.
+
+------------------------------------------------------------------
+SLIDE 20 - KESIMPULAN
+------------------------------------------------------------------
+
+Judul slide:
+Kesimpulan
+
+Naskah:
+
+Sebagai kesimpulan, DentalCare Lite merupakan aplikasi reservasi klinik gigi berbasis web yang dirancang untuk membantu digitalisasi proses pelayanan klinik.
+
+Sistem ini mencakup alur lengkap mulai dari informasi layanan, booking pasien, validasi slot, pembayaran digital, resume medis, hingga laporan admin.
+
+Melalui proyek ini, dapat dilihat bahwa penerapan teknologi web tidak hanya membantu dari sisi kemudahan penggunaan, tetapi juga meningkatkan kerapian data, efisiensi proses, dan kualitas dokumentasi.
+
+Harapannya, proyek ini bisa menjadi contoh implementasi sistem informasi kesehatan sederhana yang relevan dengan kebutuhan nyata.
+
+------------------------------------------------------------------
+SLIDE 21 - PENUTUP
+------------------------------------------------------------------
+
+Judul slide:
+Terima Kasih
+
+Naskah:
+
+Sekian presentasi dari saya mengenai DentalCare Lite.
+Terima kasih atas perhatian Bapak/Ibu dosen dan teman-teman sekalian.
+
+Saya sangat terbuka untuk kritik, saran, dan pertanyaan.
+
+Wassalamu'alaikum warahmatullahi wabarakatuh.
+
+==================================================================
+4. ALUR DEMO APLIKASI
+==================================================================
+
+Berikut alur demo yang aman, singkat, dan mudah dipahami:
+
+1. Tampilkan halaman home
+   Jelaskan bahwa pengguna umum bisa melihat informasi awal aplikasi.
+
+2. Buka halaman layanan dan dokter
+   Jelaskan bahwa pasien bisa melihat pilihan layanan dan dokter sebelum booking.
+
+3. Login sebagai pasien
+   Jelaskan bahwa pasien dapat login biasa atau menggunakan akun Google.
+
+4. Masuk ke form booking
+   Tunjukkan pilihan dokter, layanan, tanggal, dan slot waktu.
+
+5. Jelaskan validasi slot
+   Sampaikan bahwa slot yang tampil adalah hasil pengecekan jadwal dokter dan booking aktif.
+
+6. Simulasikan booking berhasil
+   Tekankan bahwa sistem membuat booking, nomor antrean, dan data pembayaran sekaligus.
+
+7. Tunjukkan riwayat pasien
+   Perlihatkan status booking dan dokumen yang dapat diunduh.
+
+8. Masuk sebagai dokter
+   Tunjukkan daftar booking dan form resume medis.
+
+9. Simulasikan pengisian resume medis
+   Jelaskan bahwa setelah data disimpan, status booking menjadi completed.
+
+10. Masuk sebagai admin
+   Tunjukkan master data, monitoring pembayaran, dan laporan.
+
+11. Buka dashboard laporan
+   Soroti total pendapatan, jumlah kunjungan, dan breakdown layanan.
+
+Tips saat demo:
+- Jangan terlalu lama di tiap halaman
+- Fokus pada alur, bukan membaca semua isi halaman
+- Jika internet atau pembayaran live tidak digunakan, jelaskan bahwa Midtrans berjalan melalui integrasi dan webhook
+- Siapkan akun pasien, dokter, dan admin sebelum presentasi
+
+==================================================================
+5. KELEBIHAN SISTEM
+==================================================================
+
+Poin kelebihan yang bisa Anda ucapkan jika dosen bertanya:
+
+- Sistem sudah mencakup proses klinik dari hulu ke hilir
+- Validasi booking memperhatikan durasi layanan, bukan hanya jam mulai
+- Pembayaran terhubung ke Midtrans dan status dapat diperbarui otomatis
+- Ada pemisahan role yang jelas antara pasien, dokter, dan admin
+- Tersedia invoice PDF dan resume medis PDF
+- Ada fitur laporan untuk admin
+- Struktur database memakai audit field sehingga lebih tertib
+- Proyek sudah dilengkapi pengujian pada alur-alur penting
+
+==================================================================
+6. KETERBATASAN SISTEM
+==================================================================
+
+Poin keterbatasan yang bisa disampaikan dengan aman:
+
+- Belum mencakup stok obat dan apotek
+- Belum mendukung multi-cabang
+- Belum ada aplikasi mobile native
+- Belum ada antrean real time di monitor klinik
+- Belum terintegrasi dengan sistem kesehatan eksternal
+- Analitik masih fokus pada laporan dasar
+
+Menyampaikan kekurangan secara jujur justru membuat presentasi terlihat matang.
+
+==================================================================
+7. PENGEMBANGAN LANJUTAN
+==================================================================
+
+Poin pengembangan lanjutan:
+
+- Reminder otomatis untuk pasien
+- Reschedule booking
+- Pembatalan booking mandiri oleh pasien
+- Riwayat rekam medis yang lebih lengkap
+- Analitik layanan terpopuler per periode
+- Integrasi pembayaran yang lebih luas
+- Multi-tenant atau multi-cabang
+- Aplikasi mobile pasien dan dokter
+
+==================================================================
+8. PREDIKSI TANYA JAWAB DOSEN
+==================================================================
+
+Pertanyaan 1:
+Mengapa memilih Laravel?
+
+Jawaban:
+Karena Laravel memiliki struktur yang rapi, mendukung pengembangan cepat, memiliki fitur bawaan seperti routing, middleware, ORM, validasi, notifikasi, dan cocok untuk membangun aplikasi bisnis berbasis web seperti sistem klinik.
+
+Pertanyaan 2:
+Apa pembeda sistem ini dengan form booking biasa?
+
+Jawaban:
+Perbedaannya ada pada integrasi alur. Sistem ini tidak berhenti di form booking, tetapi lanjut ke validasi slot, nomor antrean, pembayaran otomatis, resume medis, dan laporan admin.
+
+Pertanyaan 3:
+Bagaimana sistem mencegah double booking?
+
+Jawaban:
+Sistem mengambil jadwal dokter, booking aktif, serta durasi layanan, lalu membangun slot yang tersedia. Jika waktu yang dipilih bentrok dengan layanan lain, maka slot tersebut tidak dapat dipilih.
+
+Pertanyaan 4:
+Mengapa menggunakan Midtrans?
+
+Jawaban:
+Karena Midtrans mempermudah integrasi pembayaran digital, mendukung berbagai metode pembayaran, dan menyediakan webhook callback sehingga perubahan status transaksi dapat diproses otomatis oleh sistem.
+
+Pertanyaan 5:
+Apa fungsi audit field?
+
+Jawaban:
+Audit field digunakan untuk melacak status data, siapa yang membuat atau mengubah data, kapan perubahan dilakukan, dan mendukung tata kelola data yang lebih baik.
+
+Pertanyaan 6:
+Apakah sistem ini aman?
+
+Jawaban:
+Pada level proyek akademik, sistem sudah memakai autentikasi, pembagian hak akses berbasis role, validasi input, serta verifikasi signature pada webhook pembayaran. Namun untuk produksi tetap perlu hardening lebih lanjut, audit keamanan, dan konfigurasi server yang tepat.
+
+Pertanyaan 7:
+Apakah proyek ini siap dipakai klinik sungguhan?
+
+Jawaban:
+Secara konsep dan alur inti sudah cukup dekat dengan kebutuhan nyata, tetapi untuk benar-benar dipakai di lingkungan produksi masih perlu pengembangan lanjutan, pengujian lebih luas, dan penyesuaian operasional sesuai kebutuhan klinik.
+
+Pertanyaan 8:
+Apa tantangan terbesar saat membuat proyek ini?
+
+Jawaban:
+Salah satu tantangan terbesar adalah membuat validasi booking agar tidak hanya melihat slot kosong, tetapi juga memperhitungkan durasi layanan dan benturan jadwal agar hasilnya lebih realistis.
+
+Pertanyaan 9:
+Apa manfaat nyata dari sistem ini?
+
+Jawaban:
+Manfaatnya adalah pelayanan menjadi lebih teratur, pasien lebih mudah melakukan booking, admin lebih ringan memantau operasional, dan dokter lebih mudah mendokumentasikan hasil pemeriksaan.
+
+Pertanyaan 10:
+Kalau dikembangkan lagi, fitur apa yang paling penting?
+
+Jawaban:
+Fitur yang paling penting untuk tahap berikutnya adalah reminder jadwal, reschedule booking, stok obat, dan dashboard analitik yang lebih mendalam.
+
+==================================================================
+9. PENUTUP SINGKAT SIAP PAKAI
+==================================================================
+
+Jika Anda ingin penutup yang singkat:
+
+Demikian presentasi saya mengenai DentalCare Lite.
+Inti dari proyek ini adalah membangun sistem reservasi klinik gigi yang tidak hanya memudahkan booking, tetapi juga menghubungkan pembayaran, dokumentasi medis, dan pelaporan admin dalam satu aplikasi.
+Terima kasih atas perhatian Bapak/Ibu dosen dan teman-teman.
+Saya persilakan jika ada pertanyaan.
+
+Jika Anda ingin penutup yang sedikit lebih formal:
+
+Demikian pemaparan saya mengenai DentalCare Lite.
+Melalui proyek ini, saya mencoba menunjukkan bagaimana sistem informasi berbasis web dapat membantu digitalisasi layanan klinik gigi secara lebih terintegrasi, efisien, dan terdokumentasi.
+Saya menyadari masih ada kekurangan, sehingga kritik dan saran sangat saya harapkan untuk pengembangan selanjutnya.
+Terima kasih.
+
+==================================================================
+CATATAN PAKAI CEPAT
+==================================================================
+
+Jika waktu sangat singkat, fokuskan presentasi pada 6 bagian ini:
+- latar belakang
+- tujuan
+- gambaran sistem
+- alur booking dan pembayaran
+- fitur dokter dan admin
+- kesimpulan
+
+Jika dosen lebih tertarik ke sisi teknis, tonjolkan:
+- Laravel 11
+- validasi slot berbasis durasi layanan
+- Midtrans webhook
+- audit field
+- pengujian fitur penting
+
+Jika dosen lebih tertarik ke manfaat sistem, tonjolkan:
+- booking lebih mudah
+- jadwal lebih tertata
+- pembayaran lebih praktis
+- dokumentasi medis lebih rapi
+- laporan admin lebih cepat
+
+SELESAI

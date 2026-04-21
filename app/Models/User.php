@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasMany(Booking::class, 'patient_id');
     }
 
+    public function loginOtpChallenges(): HasMany
+    {
+        return $this->hasMany(LoginOtpChallenge::class);
+    }
+
     public function doctorBookings(): HasMany
     {
         return $this->hasMany(Booking::class, 'doctor_id');
@@ -97,5 +102,14 @@ class User extends Authenticatable
     public function isPatient(): bool
     {
         return $this->role === UserRole::Patient;
+    }
+
+    public function homeRouteName(): string
+    {
+        return match (true) {
+            $this->isAdmin() => 'admin.reports.index',
+            $this->isDoctor() => 'doctor.dashboard',
+            default => 'home',
+        };
     }
 }

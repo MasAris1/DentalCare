@@ -15,9 +15,9 @@
             ['label' => 'Rekam Medis', 'route' => 'doctor.medical-notes.index'],
         ],
         default => [
-            ['label' => 'Dashboard', 'route' => 'dashboard'],
-            ['label' => 'Buat Reservasi', 'route' => 'booking.create'],
+            ['label' => 'Buat Reservasi', 'route' => 'home', 'url' => route('home').'#booking-section'],
             ['label' => 'Riwayat', 'route' => 'history.index'],
+            ['label' => 'Dashboard', 'route' => 'dashboard'],
             ['label' => 'Profil', 'route' => 'profile.edit'],
         ],
     };
@@ -27,7 +27,7 @@
     <div class="dashboard-shell">
         <div class="dashboard-sidebar">
             <div class="p-4 border-bottom">
-                <a class="text-decoration-none text-reset" href="{{ route('dashboard') }}">
+                <a class="text-decoration-none text-reset" href="{{ route($user->homeRouteName()) }}">
                     <div class="fw-bold h5 mb-1">{{ config('clinic.name') }}</div>
                     <div class="text-secondary small">{{ $user->role->label() }}</div>
                 </a>
@@ -37,7 +37,7 @@
                 @foreach ($menu as $item)
                     <a
                         class="sidebar-link {{ request()->routeIs($item['route']) ? 'active' : '' }}"
-                        href="{{ route($item['route']) }}"
+                        href="{{ $item['url'] ?? route($item['route']) }}"
                     >
                         {{ $item['label'] }}
                     </a>

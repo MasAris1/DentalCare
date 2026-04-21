@@ -15,9 +15,32 @@ services:
       APP_UID: ${APP_UID:-1000}
       APP_GID: ${APP_GID:-1000}
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
-      - "5173:5173"
+      - "${APP_BIND:-127.0.0.1}:${VITE_PORT:-5173}:5173"
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dentalcare-queue
+    working_dir: /var/www/html
+    command: php artisan queue:work database --queue=mail,default --sleep=3 --tries=3 --timeout=90 --max-time=3600
+    restart: unless-stopped
+    stop_signal: SIGTERM
+    volumes:
+      - ./:/var/www/html
+      - dentalcare_vendor:/var/www/html/vendor
+      - dentalcare_node_modules:/var/www/html/node_modules
+    env_file:
+      - .env
+    environment:
+      APP_UID: ${APP_UID:-1000}
+      APP_GID: ${APP_GID:-1000}
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   nginx:
     image: nginx:1.27-alpine
@@ -26,7 +49,7 @@ services:
     depends_on:
       - app
     ports:
-      - "8080:80"
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-8080}:80"
     volumes:
       - ./:/var/www/html
       - dentalcare_vendor:/var/www/html/vendor
@@ -41,11 +64,16 @@ services:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
     ports:
-      - "3307:3306"
+      - "127.0.0.1:${DB_FORWARD_PORT:-3307}:3306"
     volumes:
       - dentalcare_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
 volumes:
   dentalcare_mysql:

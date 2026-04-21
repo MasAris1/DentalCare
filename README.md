@@ -11,6 +11,7 @@ DentalCare Lite adalah aplikasi reservasi klinik gigi berbasis Laravel 11 dengan
 - Reservasi online berdasarkan dokter, layanan, tanggal, dan slot yang tersedia
 - Validasi slot dengan mempertimbangkan durasi layanan dan kuota harian dokter
 - Integrasi pembayaran Midtrans Snap dan webhook callback
+- Autentikasi dua faktor via OTP email pada setiap login
 - Login dan register pasien via Google
 - Invoice PDF dan resume medis PDF
 - Notifikasi database dan email untuk booking, pembayaran, dan resume medis
@@ -49,6 +50,8 @@ make install
 ```
 
 4. Akses aplikasi di `http://localhost:8080`
+
+Container `queue` ikut berjalan saat `docker compose up -d` dan memproses email OTP serta notifikasi lain dari tabel `jobs`.
 
 ## Menjalankan tanpa Docker
 
@@ -91,12 +94,34 @@ php artisan serve
 - `GOOGLE_CLIENT_ID`
 - `GOOGLE_CLIENT_SECRET`
 - `GOOGLE_REDIRECT_URI`
-- `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
+- `MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
+- `MAIL_FROM_ADDRESS` gunakan alamat resmi yang sudah diverifikasi di provider email, misalnya `noreply@dentalcarelite.id`
+- `LOGIN_OTP_DIGITS`, `LOGIN_OTP_EXPIRES_MINUTES`, `LOGIN_OTP_MAX_ATTEMPTS`
 - `APPOINTMENT_SLOT_MINUTES`
 
 Jika key Midtrans belum diisi, aplikasi tetap bisa membuat booking untuk demo, tetapi pembayaran eksternal tidak akan berjalan penuh.
 
 Untuk Google login, buat OAuth Client di Google Cloud Console lalu arahkan callback ke URL absolut aplikasi Anda, misalnya `http://localhost:8080/auth/google/callback`.
+
+Setiap login password atau Google akan meminta OTP email. Untuk production, gunakan mailer SMTP/transactional email sungguhan dan isi `MAIL_FROM_ADDRESS`, `MAIL_USERNAME`, serta `MAIL_PASSWORD` di `.env`. Jika memakai Gmail, gunakan App Password, bukan password akun utama. Untuk klinik/domain publik, provider seperti Amazon SES, Mailgun, SendGrid, Brevo, atau SMTP hosting domain lebih disarankan daripada akun Gmail personal.
+
+Deploy production wajib menjalankan migration dan restart queue:
+
+```bash
+make deploy
+```
+
+Jika tidak memakai `make`, jalankan:
+
+```bash
+docker compose up -d --build mysql app nginx
+docker compose exec app php artisan migrate --force
+docker compose exec app php artisan optimize:clear
+docker compose exec app php artisan config:cache
+docker compose exec app php artisan route:cache
+docker compose exec app php artisan queue:restart
+docker compose up -d --build queue
+```
 
 ## Testing
 
@@ -123,3 +148,16 @@ Ekstensi PHP yang dibutuhkan PHPUnit antara lain `dom`, `xml`, dan `xmlwriter`.
 - Semua tabel utama memakai 7 audit fields melalui helper schema dan trait model.
 - Booking aktif dibatasi unique slot per dokter, tanggal, dan jam untuk mengurangi double booking.
 - Invoice hanya bisa diunduh setelah pembayaran berstatus `paid`.
+
+## Demo Publik untuk Presentasi
+
+Untuk membuka aplikasi dari laptop melalui ngrok atau Cloudflare Tunnel, gunakan panduan di `docs/PRESENTATION_DEMO.md`.
+
+Command utama:
+
+```bash
+make presentation-apply
+make public-url URL=https://url-tunnel-kamu
+make demo
+make presentation-check
+```

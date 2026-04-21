@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Patient;
 
 use App\Enums\BookingStatus;
 use App\Enums\PaymentStatus;
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\Service;
-use App\Models\User;
 use App\Notifications\BookingCreatedNotification;
 use App\Services\BookingService;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -20,46 +16,9 @@ use Illuminate\View\View;
 
 class BookingController extends Controller
 {
-    public function create(Request $request, BookingService $bookingService): View
+    public function create(Request $request): RedirectResponse
     {
-        $services = Service::query()->orderBy('name')->get();
-        $selectedDoctor = null;
-        $selectedService = null;
-        $selectedDate = $request->string('booking_date')->toString();
-        $availableSlots = [];
-
-        if ($request->filled('doctor_id')) {
-            $selectedDoctor = User::query()
-                ->where('role', UserRole::Doctor->value)
-                ->whereKey($request->integer('doctor_id'))
-                ->with('doctorSchedules')
-                ->first();
-        }
-
-        if ($request->filled('service_id')) {
-            $selectedService = $services->firstWhere('id', $request->integer('service_id'));
-        }
-
-        if ($selectedDoctor && $selectedService && $selectedDate) {
-            $availableSlots = $bookingService->availableSlots(
-                $selectedDoctor,
-                Carbon::parse($selectedDate),
-                $selectedService
-            );
-        }
-
-        return view('patient.bookings.create', [
-            'doctors' => User::query()
-                ->where('role', UserRole::Doctor->value)
-                ->with(['doctorProfile', 'doctorSchedules'])
-                ->orderBy('name')
-                ->get(),
-            'services' => $services,
-            'selectedDoctor' => $selectedDoctor,
-            'selectedService' => $selectedService,
-            'selectedDate' => $selectedDate,
-            'availableSlots' => $availableSlots,
-        ]);
+        return redirect()->to(route('home', $request->query(), false).'#booking-section');
     }
 
     public function store(Request $request, BookingService $bookingService): RedirectResponse
@@ -78,9 +37,13 @@ class BookingController extends Controller
 
         $request->user()->notify(new BookingCreatedNotification($booking));
 
+        if (filled($booking->payment?->redirect_url)) {
+            return redirect()->away($booking->payment->redirect_url);
+        }
+
         return redirect()
             ->route('history.index')
-            ->with('success', 'Reservasi berhasil dibuat. Silakan lanjutkan pembayaran untuk mengamankan slot Anda.');
+            ->with('success', 'Reservasi berhasil dibuat. Tautan pembayaran belum tersedia, silakan lanjutkan pembayaran dari riwayat reservasi.');
     }
 
     public function history(Request $request): View

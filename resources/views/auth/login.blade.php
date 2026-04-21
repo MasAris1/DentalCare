@@ -2,7 +2,7 @@
 
 @section('title', 'Masuk | '.config('clinic.name'))
 @section('auth_title', 'Masuk ke akun Anda')
-@section('auth_subtitle', 'Akses dashboard pasien, dokter, atau admin sesuai peran Anda.')
+@section('auth_subtitle', 'Masuk untuk melanjutkan reservasi, pembayaran, atau akses internal sesuai peran Anda.')
 
 @section('content')
     @php($googleAuthEnabled = filled(config('services.google.client_id')) && filled(config('services.google.client_secret')) && filled(config('services.google.redirect')))
@@ -26,6 +26,7 @@
 
     <form method="POST" action="{{ route('login') }}" class="d-grid gap-3">
         @csrf
+        <input type="hidden" name="redirect" value="{{ request('redirect') }}">
 
         <div>
             <label class="form-label">Email</label>
@@ -52,6 +53,6 @@
 
     <div class="text-center text-secondary small mt-4">
         Belum punya akun?
-        <a class="text-decoration-none fw-semibold" href="{{ route('register') }}">Daftar sebagai pasien</a>
+        <a class="text-decoration-none fw-semibold" href="{{ route('register', request()->filled('redirect') ? ['redirect' => request('redirect')] : []) }}">Daftar sebagai pasien</a>
     </div>
 @endsection

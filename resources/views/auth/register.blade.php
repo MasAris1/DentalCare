@@ -27,6 +27,7 @@
 
     <form method="POST" action="{{ route('register') }}" class="row g-3">
         @csrf
+        <input type="hidden" name="redirect" value="{{ request('redirect') }}">
 
         <div class="col-12">
             <label class="form-label">Nama lengkap</label>
@@ -55,6 +56,6 @@
 
     <div class="text-center text-secondary small mt-4">
         Sudah punya akun?
-        <a class="text-decoration-none fw-semibold" href="{{ route('login') }}">Masuk di sini</a>
+        <a class="text-decoration-none fw-semibold" href="{{ route('login', request()->filled('redirect') ? ['redirect' => request('redirect')] : []) }}">Masuk di sini</a>
     </div>
 @endsection

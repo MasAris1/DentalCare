@@ -77,8 +77,8 @@
                         <div class="alert alert-warning border-0">
                             Anda perlu masuk sebagai pasien untuk menyelesaikan reservasi.
                             <div class="mt-3 d-flex gap-2">
-                                <a class="btn btn-dark rounded-pill px-4" href="{{ route('login') }}">Masuk</a>
-                                <a class="btn btn-outline-dark rounded-pill px-4" href="{{ route('register') }}">Daftar</a>
+                                <a class="btn btn-dark rounded-pill px-4" href="{{ route('login', ['redirect' => url()->full()]) }}">Masuk</a>
+                                <a class="btn btn-outline-dark rounded-pill px-4" href="{{ route('register', ['redirect' => url()->full()]) }}">Daftar</a>
                             </div>
                         </div>
                     @else

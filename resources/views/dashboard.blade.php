@@ -74,7 +74,7 @@
                     <h2 class="h5 fw-bold mb-2">Langkah berikutnya</h2>
                     <p class="text-secondary">Pilih dokter, tentukan jadwal, lalu lanjutkan pembayaran untuk mengunci slot antrean Anda.</p>
                     <div class="d-grid gap-2">
-                        <a class="btn btn-primary rounded-pill" href="{{ route('booking.create') }}">Buat reservasi baru</a>
+                        <a class="btn btn-primary rounded-pill" href="{{ route('home') }}#booking-section">Buat reservasi baru</a>
                         <a class="btn btn-outline-secondary rounded-pill" href="{{ route('profile.edit') }}">Lengkapi profil</a>
                     </div>
                 </div>

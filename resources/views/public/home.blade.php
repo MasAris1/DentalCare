@@ -11,7 +11,7 @@
                     <h1 class="display-5 fw-bold mb-3">Rawat senyum keluarga dengan booking online, pembayaran instan, dan rekam medis yang rapi.</h1>
                     <p class="lead text-secondary mb-4">{{ config('clinic.tagline') }}</p>
                     <div class="d-flex flex-wrap gap-3">
-                        <a class="btn btn-primary btn-lg rounded-pill px-4" href="{{ route('booking.create') }}">Buat Reservasi</a>
+                        <a class="btn btn-primary btn-lg rounded-pill px-4" href="{{ route('home') }}#booking-section">Buat Reservasi</a>
                         <a class="btn btn-outline-dark btn-lg rounded-pill px-4" href="{{ route('doctors.index') }}">Lihat Dokter</a>
                     </div>
                 </div>
@@ -37,6 +37,8 @@
             </div>
         </div>
     </section>
+
+    @include('public.partials.booking-section')
 
     <section class="py-5 bg-white">
         <div class="container">
@@ -108,7 +110,7 @@
                     <h2 class="display-6 fw-bold text-white mb-2">Booking sekarang dan amankan antrean Anda hari ini.</h2>
                     <p class="text-white-50 mb-0">Pilih dokter, tentukan jadwal, lalu selesaikan pembayaran secara otomatis lewat Midtrans.</p>
                 </div>
-                <a class="btn btn-light btn-lg rounded-pill px-4" href="{{ route('booking.create') }}">Mulai reservasi</a>
+                <a class="btn btn-light btn-lg rounded-pill px-4" href="{{ route('home') }}#booking-section">Mulai reservasi</a>
             </div>
         </div>
     </section>

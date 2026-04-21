@@ -24,12 +24,36 @@
                             <a class="nav-link {{ request()->routeIs('doctors.*') ? 'active' : '' }}" href="{{ route('doctors.index') }}">Dokter</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('booking.*') ? 'active' : '' }}" href="{{ route('booking.create') }}">Reservasi</a>
+                            <a class="nav-link" href="{{ route('home') }}#booking-section">Reservasi</a>
                         </li>
 
                         @auth
-                            <li class="nav-item ms-lg-3">
-                                <a class="btn btn-primary rounded-pill px-4" href="{{ route('dashboard') }}">Dashboard</a>
+                            @php($firstName = str(auth()->user()->name)->before(' ') ?: auth()->user()->name)
+
+                            <li class="nav-item dropdown ms-lg-3">
+                                <button
+                                    class="btn btn-primary rounded-pill px-4 dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    Hai, {{ $firstName }}
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                                    @php($dashboardRoute = auth()->user()->isPatient() ? route('dashboard') : route(auth()->user()->homeRouteName()))
+
+                                    <li>
+                                        <a class="dropdown-item" href="{{ $dashboardRoute }}">Dashboard</a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button class="dropdown-item text-danger" type="submit">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         @else
                             <li class="nav-item ms-lg-3">
@@ -45,6 +69,9 @@
         </nav>
 
         <main>
+            <div class="container pt-3">
+                @include('layouts.partials.flash')
+            </div>
             @yield('content')
         </main>
 

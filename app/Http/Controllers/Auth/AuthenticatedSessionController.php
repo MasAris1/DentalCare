@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\Auth\LoginOtpService;
+use App\Support\AuthRedirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +24,17 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, LoginOtpService $loginOtp): RedirectResponse
     {
-        $request->authenticate();
+        $user = $request->authenticate();
+        $redirect = AuthRedirect::pathFromRequestOrDefault($request, $user);
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $loginOtp->start($user, $request, $request->boolean('remember'), $redirect);
+
+        return redirect()->route('two-factor.login')
+            ->with('status', 'Kode OTP sudah dikirim ke email Anda.');
     }
 
     /**

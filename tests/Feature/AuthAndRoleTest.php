@@ -22,7 +22,7 @@ class AuthAndRoleTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/');
         $this->assertAuthenticated();
 
         $user = auth()->user();

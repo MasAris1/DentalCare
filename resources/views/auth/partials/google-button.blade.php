@@ -4,7 +4,7 @@
 @endphp
 
 <div class="d-grid gap-2">
-    <a class="btn btn-outline-dark rounded-pill w-100 d-inline-flex align-items-center justify-content-center gap-2 py-2" href="{{ route('auth.google.redirect') }}">
+    <a class="btn btn-outline-dark rounded-pill w-100 d-inline-flex align-items-center justify-content-center gap-2 py-2" href="{{ route('auth.google.redirect', request()->filled('redirect') ? ['redirect' => request('redirect')] : []) }}">
         <svg aria-hidden="true" focusable="false" height="18" viewBox="0 0 24 24" width="18">
             <path d="M21.8 12.23c0-.68-.06-1.33-.17-1.95H12v3.69h5.5a4.71 4.71 0 0 1-2.04 3.09v2.56h3.3c1.93-1.78 3.04-4.39 3.04-7.39Z" fill="#4285F4"/>
             <path d="M12 22c2.76 0 5.08-.91 6.77-2.47l-3.3-2.56c-.91.61-2.08.98-3.47.98-2.67 0-4.94-1.8-5.75-4.22H2.84v2.64A9.99 9.99 0 0 0 12 22Z" fill="#34A853"/>
